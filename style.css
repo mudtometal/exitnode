@@ -1,0 +1,539 @@
+/* EXIT NODE — studio & press
+   Register: quiet fashion-studio minimalism. Inter carries text,
+   Times carries the wordmark and titles. Hairlines, air, small type. */
+
+:root {
+  --paper: #ffffff;
+  --ink: #111111;
+  --dim: #8a8a8a;
+  --hair: #e6e6e6;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: "Inter", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  cursor: url("assets/cursor-dark.png") 12 12, auto;
+}
+
+.times { font-family: "Times New Roman", Times, serif; }
+
+/* small utility register — tiny uppercase Inter, Schneider-style */
+.mono {
+  font-family: inherit;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+.mono a { color: var(--dim); }
+
+a { color: var(--ink); text-decoration: none; cursor: url("assets/cursor-dark.png") 12 12, pointer; }
+a:hover { text-decoration: underline; }
+a[href^="mailto:"]:hover { color: #551a8b; }   /* email links go purple on hover, everywhere */
+a:focus-visible { outline: 1px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- inner pages ---------- */
+
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 24px 18px;
+}
+
+header.cat {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;        /* nav spans the logo's height */
+  margin-bottom: 36px;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.cat-logo { display: block; height: clamp(110px, 14vw, 140px); width: auto; }
+a.logo-link:hover { text-decoration: none; }
+
+header.cat .wordmark {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+header.cat .wordmark:hover { text-decoration: none; }
+
+/* nav: quiet right-aligned column, like an index margin note */
+nav.cat-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;   /* distribute links across the logo height */
+  gap: 6px;
+}
+nav.cat-nav a {
+  font-family: "Times New Roman", Times, serif;   /* match the spreadsheet links */
+  font-size: clamp(15px, 1.7vw, 21px);            /* grow with the logo on desktop */
+  color: #551a8b;               /* spreadsheet-link purple */
+  text-decoration: underline;
+  line-height: 1.4;
+}
+nav.cat-nav a:hover { color: #7a3fb5; }
+/* current page stays a normal purple link, marked with an arrow pointing at it */
+nav.cat-nav a[aria-current="page"]::before {
+  content: "→";
+  text-decoration: none;
+  display: inline-block;   /* keep the arrow out of the underline */
+  margin-right: 7px;
+}
+
+h1.cat-title {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 400;
+  color: var(--dim);
+  margin-bottom: 28px;
+}
+
+/* ---------- index sheet ----------
+   spreadsheet register: 1px hairline grid, cinematic strip per entry */
+
+.sheet {
+  display: grid;
+  gap: 1px;
+  background: var(--hair);   /* shows through the 1px gaps = grid lines */
+  border: 1px solid var(--hair);
+}
+
+.sheet .row {
+  display: grid;
+  gap: 1px;
+  background: var(--hair);
+  color: inherit;
+}
+
+/* one dry line of scope + the address — the whole pitch, as a sheet cell */
+.scope-cell {
+  background: var(--paper);
+  padding: 12px 14px 12px 10px;
+  font-size: 11px;
+  color: var(--dim);
+}
+.scope-cell a { color: var(--ink); }
+.sheet a.row:hover { text-decoration: none; }
+.sheet a.row:hover .cells > span { background: #fafafa; }
+
+.strip {
+  /* super wide, thin, cinematic */
+  height: clamp(64px, 9vw, 110px);
+  background: #f4f4f4;
+  overflow: hidden;
+}
+.strip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cells {
+  display: grid;
+  grid-template-columns: 56px minmax(150px, 1.1fr) 96px 132px 2.2fr;
+  gap: 1px;
+  background: var(--hair);
+}
+.cells > span {
+  background: var(--paper);
+  padding: 10px 14px 10px 10px;
+  font-size: 11.5px;
+}
+.cells.head > span {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+.cells .no,
+.cells .year,
+.cells .cat {
+  font-size: 11px;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.cells .title {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 13px;
+  line-height: 1.2;
+  color: #551a8b;                 /* natural old-web link, purple */
+  text-decoration: underline;
+}
+.sheet a.row:hover .cells .title { color: #7a3fb5; }
+
+.cells .note { font-size: 10.5px; line-height: 1.5; }
+.sheet .pending .cells > span { color: #c4c4c4; }
+
+@media (max-width: 640px) {
+  /* keep real hairline cells on mobile — reflow, don't flatten.
+     Line 1: no · title · scope · year (year hard right).
+     Line 2: the note, full width. */
+  .cells.head { display: none; }
+  .cells {
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas:
+      "no   title cat  year"
+      "note note  note note";
+  }
+  .cells .no { grid-area: no; }
+  .cells .title { grid-area: title; }
+  .cells .cat { grid-area: cat; text-align: right; }
+  .cells .year { grid-area: year; text-align: right; }
+  .cells .note { grid-area: note; white-space: normal; }
+  .strip { height: clamp(60px, 18vw, 96px); }
+}
+
+/* ---------- entry pages (spreadsheet register) ---------- */
+
+.crumb { margin-bottom: 14px; }
+.crumb a:hover { color: #551a8b; }   /* return arrow goes purple like other links */
+
+/* the whole case block is one hairline sheet, like the index */
+.entrysheet { margin-bottom: 0; }
+
+.e-banner {
+  /* crop by height like an index strip — never a full-width thin band */
+  height: clamp(90px, 13vw, 150px);
+  overflow: hidden;
+  background: #f4f4f4;
+}
+.e-banner img,
+.e-banner video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* full figure cell — shows an image at its own ratio, uncropped */
+.e-figure { background: var(--paper); }
+.e-figure img { display: block; width: 100%; height: auto; }
+
+.e-title {
+  background: var(--paper);
+  font-family: "Times New Roman", Times, serif;
+  font-size: clamp(26px, 4.5vw, 44px);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  padding: 12px 14px;
+}
+
+/* metadata + description as one continuous grid of cells */
+.e-info {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.9fr) 1.2fr;
+  background: var(--paper);   /* white: no grey fill under the shorter column */
+  align-items: start;         /* meta takes its own height, doesn't stretch */
+}
+.e-info .e-meta { border-right: 1px solid var(--hair); }   /* seam meta|desc */
+.e-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1px;
+  background: var(--hair);
+  align-content: start;
+}
+.e-meta .k,
+.e-meta .v {
+  background: var(--paper);
+  padding: 9px 12px;
+}
+.e-meta .k {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+  white-space: nowrap;
+}
+.e-meta .v { font-size: 12px; }
+.e-meta a:hover,
+.e-desc a:hover { color: #551a8b; }   /* all content links go purple on hover */
+.e-desc {
+  background: var(--paper);
+  padding: 12px 14px;
+}
+.e-desc p { margin: 0 0 12px; font-size: 12.5px; line-height: 1.7; }
+.e-desc p:last-child { margin-bottom: 0; }
+.e-desc p.cta { margin-top: 18px; font-weight: 500; }
+/* structured scope list on case pages */
+.e-desc ul.scope { list-style: none; margin: 10px 0 0; padding: 0; }
+.e-desc ul.scope li { font-size: 12.5px; line-height: 1.7; }
+.e-desc ul.scope li::before { content: "— "; color: var(--dim); }
+.e-desc p + p { margin-top: 12px; }
+.e-meta .v.clients { color: var(--dim); line-height: 1.75; }
+
+/* plates: tight 1px-gap grid of grey placeholders */
+.plates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--hair);
+  border: 1px solid var(--hair);
+  margin: 26px 0 48px;   /* deliberate gap from the sheet above */
+}
+/* per-project column override: 2-up on desktop, 1-up on mobile */
+.plates.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+@media (max-width: 640px) {
+  .plates,
+  .plates.cols-2 { grid-template-columns: 1fr; }
+}
+.plate {
+  background: #eaeaea;
+  aspect-ratio: 4 / 3;
+  width: 100%;
+}
+img.plate,
+video.plate {
+  aspect-ratio: auto;   /* show the whole image at its own ratio, no crop */
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 640px) {
+  .e-info {
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--hair);   /* stacked: hairline seam between meta and desc */
+  }
+  .e-info .e-meta { border-right: none; }
+}
+
+/* legacy metadata list — still used by press.html / about.html */
+.entry-meta { margin: 0 0 48px; max-width: 560px; }
+.entry-meta > div {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--hair);
+  font-size: 12px;
+}
+.entry-meta span.k {
+  display: inline-block;
+  min-width: 120px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dim);
+}
+
+/* ---------- prose ---------- */
+
+.prose { max-width: 560px; }
+.prose p { margin-bottom: 14px; }
+.prose .clients { color: var(--dim); font-size: 12px; line-height: 1.7; }
+.rule { border: 0; border-top: 1px solid var(--hair); margin: 40px 0; }
+
+footer.cat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 36px;
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  color: var(--dim);
+}
+footer.cat a { color: var(--dim); text-transform: none; }
+footer.cat a:hover { color: #551a8b; text-decoration: underline; }
+
+/* ---------- landing ---------- */
+
+body.landing {
+  background: #000000;
+  color: #ffffff;
+  min-height: 100svh;
+  overflow: hidden;
+  cursor: url("assets/cursor.png") 12 12, auto;
+}
+body.landing a { cursor: url("assets/cursor.png") 12 12, pointer; }
+
+/* rubik drum: two invisible 6-sided rings sharing the center window */
+.collage {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  perspective: 1300px;
+  touch-action: none;
+}
+.drum {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  /* square faces: both rings share identical geometry, so every fold
+     edge lands exactly on the center face's border.
+     Capped against svh so the top/bottom faces never overflow the screen */
+  width: min(480px, 56vw, 40svh);
+  height: min(480px, 56vw, 40svh);
+  transform-style: preserve-3d;
+  visibility: hidden;   /* shown by JS once images are assigned */
+}
+.face {
+  position: absolute;
+  inset: 0;
+  border: 1px solid #000000;
+  background: #000000;
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.face .shade {
+  /* depth shadow: gradient set by JS, darkening toward the outer edge */
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.face img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+.face .bg {
+  /* blurred duplicate fills whatever the sharp copy leaves empty */
+  object-fit: cover;
+  filter: blur(22px) brightness(0.85);
+  transform: scale(1.15);
+}
+.face .fg {
+  object-fit: contain;   /* the image itself is never cropped */
+}
+
+/* the overlay is click-through so collage images can be dragged anywhere;
+   only the Enter link catches the pointer */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 24px;
+  pointer-events: none;
+}
+.overlay a.enter { pointer-events: auto; }
+.logo-slot svg { pointer-events: auto; }  /* painted paths take hits for the shooting */
+
+.landing-head { text-align: center; }
+.landing-head .meta {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.7);
+}
+
+.logo-slot { align-self: center; text-align: center; position: relative; }
+.logo-slot .hole {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  image-rendering: pixelated;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: opacity 2.5s ease;
+}
+.logo-slot svg {
+  /* the girl badge: tall and narrow, centered over the drum */
+  width: min(170px, 30vw, 21svh);
+  height: auto;
+  aspect-ratio: 37.8 / 66.68;
+  display: block;
+  filter: drop-shadow(0 0 24px rgba(0,0,0,0.45));
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.drip {
+  position: absolute;
+  width: 2px;
+  pointer-events: none;
+  user-select: none;
+  transition: opacity 2.5s ease;
+}
+
+.landing-foot { text-align: center; }
+.landing-foot a.enter {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #ffffff;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.7);
+}
+
+@media (max-width: 560px) {
+  header.cat { margin-bottom: 28px; align-items: center; }  /* stay a row: nav beside the logo */
+  .cat-logo { height: 108px; }               /* match the 4-link nav block height */
+}
+
+/* ============================================================
+   LOAD ANIMATIONS — experimental, self-contained. Delete this
+   whole block to revert; nothing else references it.
+   ============================================================ */
+
+/* --- inner pages: top→bottom render with a visible scan head --- */
+@keyframes en-line {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes en-scan {
+  0%   { top: -40px; opacity: 1; }
+  100% { top: 100%;  opacity: 0; }
+}
+.page {
+  position: relative;
+  animation: en-line 0.55s steps(32, end) both;   /* many fine lines */
+}
+.page::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -40px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(17,17,17,0), rgba(17,17,17,0.12));
+  border-bottom: 2px solid rgba(17, 17, 17, 0.4);
+  pointer-events: none;
+  z-index: 60;
+  animation: en-scan 0.55s steps(32, end) both;
+}
+
+/* --- landing: white elements ease in fast; cube scales up in
+       choppy, jittery steps — slow, and not grabbable while it enters --- */
+@keyframes en-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes en-cube {
+  from { transform: scale(0.04); opacity: 0; pointer-events: none; }
+  to   { transform: scale(1);    opacity: 1; pointer-events: auto; }
+}
+body.landing .overlay {
+  animation: en-fade 0.45s ease both;
+}
+body.landing .collage {
+  animation: en-cube 1.4s steps(20, end) 0.2s both;   /* higher framerate, still choppy */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page, .page::before,
+  body.landing .overlay,
+  body.landing .collage { animation: none; }
+}
