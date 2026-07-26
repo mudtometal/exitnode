@@ -2,6 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/archive", "destination": "/index", "permanent": true }
+    { "source": "/archive", "destination": "/work", "permanent": true },
+    { "source": "/index", "destination": "/work", "permanent": false }
   ]
 }
