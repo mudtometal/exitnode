@@ -1,11 +1,20 @@
 {
-  "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/home" }
+    { "source": "/", "destination": "/home.html" },
+    { "source": "/index", "destination": "/list.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/press", "destination": "/press.html" },
+    { "source": "/hardstyle", "destination": "/hardstyle.html" },
+    { "source": "/arc-london", "destination": "/arc-london.html" },
+    { "source": "/lone-ones", "destination": "/lone-ones.html" },
+    { "source": "/cyvist", "destination": "/cyvist.html" },
+    { "source": "/mudmetal", "destination": "/mudmetal.html" },
+    { "source": "/vlone", "destination": "/vlone.html" },
+    { "source": "/artist-merchandising", "destination": "/artist-merchandising.html" }
   ],
   "redirects": [
     { "source": "/archive", "destination": "/index", "permanent": true },
-    { "source": "/work", "destination": "/index", "permanent": false }
+    { "source": "/work", "destination": "/index", "permanent": true }
   ]
 }
