@@ -1,8 +1,11 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/home" }
+  ],
   "redirects": [
-    { "source": "/archive", "destination": "/work", "permanent": true },
-    { "source": "/index", "destination": "/work", "permanent": false }
+    { "source": "/archive", "destination": "/index", "permanent": true },
+    { "source": "/work", "destination": "/index", "permanent": false }
   ]
 }
