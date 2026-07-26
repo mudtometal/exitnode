@@ -379,6 +379,7 @@ body.landing a { cursor: url("assets/cursor.png") 12 12, pointer; }
   height: min(480px, 56vw, 40svh);
   transform-style: preserve-3d;
   visibility: hidden;   /* shown by JS once images are assigned */
+  will-change: transform;   /* own compositing layer = smoother spins */
 }
 .face {
   position: absolute;
@@ -397,6 +398,10 @@ body.landing a { cursor: url("assets/cursor.png") 12 12, pointer; }
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
+/* while a finger is actively dragging, the shadow must track the rotation
+   frame-for-frame — the eased transition above causes lag/flicker on fast
+   multi-swipes, so we disable it until release */
+.collage.dragging .shade { transition: none; }
 .face img {
   position: absolute;
   inset: 0;

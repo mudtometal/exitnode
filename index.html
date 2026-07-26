@@ -28,7 +28,7 @@
     </div>
 
     <div class="landing-foot">
-      <a class="enter" href="/archive">Enter</a>
+      <a class="enter" href="/index">Enter</a>
     </div>
   </div>
 
@@ -120,7 +120,7 @@
   let introLock = true;
   setTimeout(() => { introLock = false; }, 1650);
   // once the cube has settled, pause, then spin it once so it reads as interactive
-  setTimeout(() => { if (pool.length) turn(ringY, 1, 700); }, 2300);
+  setTimeout(() => { if (pool.length) turn(ringY, -1, 700); }, 2300);
   const mod = (n, m) => ((n % m) + m) % m;
 
   const makeRing = axis => {
@@ -207,8 +207,13 @@
       const dir = r.axis === 'Y'
         ? (world > 0 ? 'right' : 'left')
         : (world > 0 ? 'top' : 'bottom');
-      fc.shade.style.background =
-        'linear-gradient(to ' + dir + ', rgba(0,0,0,0.03), rgba(0,0,0,0.7))';
+      // only rewrite the gradient when the side actually flips — avoids a
+      // full repaint of the shade layer on every drag frame
+      if (fc._dir !== dir) {
+        fc.shade.style.background =
+          'linear-gradient(to ' + dir + ', rgba(0,0,0,0.03), rgba(0,0,0,0.7))';
+        fc._dir = dir;
+      }
       fc.shade.style.opacity = t.toFixed(2);
     });
   };
@@ -238,13 +243,30 @@
     setTimeout(() => assign(r, r.rot, true), ms + 30);
   };
 
-  // drag: first significant movement locks onto one ring
-  let drag = null, lastInput = 0;
+  // drag: first significant movement locks onto one ring.
+  // Live pointer work is coalesced into a single rAF per frame, so rapid
+  // multi-swipes stay smooth instead of thrashing style/layout on every
+  // pointermove (which can fire 120+/sec on touch screens).
+  let drag = null, lastInput = 0, rafPending = false;
   const touch = () => lastInput = performance.now();
+
+  const stepDrag = () => {
+    rafPending = false;
+    if (!drag || !drag.r) return;
+    const nrot = drag.rot0 + drag.d * 0.22;
+    const now = performance.now();
+    drag.v = (nrot - drag.r.rot) / Math.max(now - drag.t, 1) * 1000;  // deg/s
+    drag.t = now;
+    drag.r.rot = nrot;
+    apply(drag.r);
+    assign(drag.r, nrot, true);
+  };
+
   stage.addEventListener('pointerdown', e => {
     if (introLock) return;
-    drag = { x: e.clientX, y: e.clientY, r: null, rot0: 0, v: 0, t: performance.now() };
+    drag = { x: e.clientX, y: e.clientY, r: null, rot0: 0, v: 0, d: 0, t: performance.now() };
     stage.setPointerCapture(e.pointerId);
+    stage.classList.add('dragging');   // freeze shade easing while live-dragging
     touch();
   });
   stage.addEventListener('pointermove', e => {
@@ -258,18 +280,13 @@
       centers();
       drag.r.el.style.transition = 'none';
     }
-    const d = drag.r.axis === 'Y' ? dx : -dy;
-    const nrot = drag.rot0 + d * 0.22;
-    const now = performance.now();
-    drag.v = (nrot - drag.r.rot) / Math.max(now - drag.t, 1) * 1000;  // deg/s
-    drag.t = now;
-    drag.r.rot = nrot;
-    apply(drag.r);
-    assign(drag.r, nrot, true);
+    drag.d = drag.r.axis === 'Y' ? dx : -dy;
     touch();
+    if (!rafPending) { rafPending = true; requestAnimationFrame(stepDrag); }
   });
   const release = () => {
     if (!drag) return;
+    stage.classList.remove('dragging');   // restore smooth shade settle
     if (drag.r) turn(drag.r, Math.max(-2, Math.min(2, Math.round(drag.v / 400))), 280);
     drag = null;
     touch();
