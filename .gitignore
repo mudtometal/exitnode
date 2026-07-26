@@ -8,3 +8,9 @@
 *.swp
 *~
 Thumbs.db
+
+# Local docs (not part of the site)
+SETUP-GUIDE.md
+
+# stray sandbox test file (safe to delete)
+__renametest_*.txt
