@@ -3,21 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EXIT NODE</title>
+<title>002 — Hardstyle — EXIT NODE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<meta property="og:title" content="EXIT NODE">
-<meta property="og:description" content="EXIT NODE">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://exitnode.cc/assets/og-image.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="EXIT NODE">
-<meta name="twitter:image" content="https://exitnode.cc/assets/og-image.png">
 </head>
 <body>
 <div class="page">
@@ -37,25 +28,24 @@
   <div class="sheet entrysheet">
 
     <div class="e-banner">
-      <img src="assets/strips/003.jpg" alt="" onerror="this.remove()">
+      <img src="assets/strips/002.jpg" alt="" onerror="this.remove()">
     </div>
 
-    <div class="e-title">The Arc London</div>
+    <div class="e-title">Hardstyle</div>
 
     <div class="e-info">
       <div class="e-meta">
-        <span class="k">Entry</span><span class="v">003</span>
+        <span class="k">Entry</span><span class="v">002</span>
         <span class="k">Years</span><span class="v">2026</span>
-        <span class="k">Category</span><span class="v">Web</span>
-        <span class="k">Role</span><span class="v">Web</span>
+        <span class="k">Category</span><span class="v">Design</span>
+        <span class="k">Role</span><span class="v">Design, Web</span>
       </div>
       <div class="e-desc">
-        <p>One of the most extensive fashion archives in circulation.</p>
-        <p>A full-stack redesign and migration to a private, invitation-only lending platform for stylists.</p>
+        <p>Work for the styling duo Hardstyle.</p>
         <ul class="scope">
-          <li>Platform architecture and build</li>
-          <li>Pull-lists, booking, and e-signatures</li>
-          <li>Migration and full operational ownership</li>
+          <li>Exhibition furniture</li>
+          <li>Graphic design</li>
+          <li>Website development</li>
         </ul>
       </div>
     </div>
@@ -63,10 +53,10 @@
   </div>
 
   <div class="plates cols-2">
-    <img class="plate" src="assets/plates/arc-01.jpg" alt="">
-    <img class="plate" src="assets/plates/arc-02.jpg" alt="">
-    <img class="plate" src="assets/plates/arc-03.jpg" alt="">
-    <img class="plate" src="assets/plates/arc-04.jpg" alt="">
+    <img class="plate" src="assets/plates/hardstyle-01.jpg" alt="">
+    <img class="plate" src="assets/plates/hardstyle-02.jpg" alt="">
+    <img class="plate" src="assets/plates/hardstyle-03.jpg" alt="">
+    <img class="plate" src="assets/plates/hardstyle-04.jpg" alt="">
     <!-- media plate (image / gif / seamless video, no player UI):
     <video class="plate" autoplay muted loop playsinline poster="assets/plates/x.jpg">
       <source src="assets/plates/x.mp4" type="video/mp4">
