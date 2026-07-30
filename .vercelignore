@@ -1,0 +1,13 @@
+# original full-size collage sources — only collage/opt/*.webp is deployed
+collage/*.png
+collage/*.jpg
+collage/*.jpeg
+DNM BOOK/
+cyvist asset/
+hardstyle assets/
+loneones assets/
+mudmetal_assets/
+thearc assets/
+assets/about_8ball.png
+*.command
+SETUP-GUIDE.md

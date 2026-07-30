@@ -123,13 +123,21 @@
   // movement is consistent and reversible in every direction.
   const stage = document.querySelector('.collage');
 
-  // intro lock: ignore interaction while the cube plays its entrance
-  // (keep in sync with the .collage animation duration in style.css).
-  // Revert: delete these two lines and the `introLock` check below.
-  let introLock = true;
-  setTimeout(() => { introLock = false; }, 1650);
-  // once the cube has settled, pause, then spin it once so it reads as interactive
-  setTimeout(() => { if (pool.length) turn(ringY, -1, 700); }, 2300);
+  // intro lock: ignore interaction while the cube plays its entrance.
+  // The entrance no longer runs on a blind page-load timer — it is started
+  // by `startIntro()` once the first visible faces have actually decoded,
+  // so the cube never scales up over empty/half-painted stickers.
+  let introLock = true, introStarted = false;
+  const startIntro = () => {
+    if (introStarted) return;
+    introStarted = true;
+    document.body.classList.add('cube-ready');   // CSS entrance fires here
+    // unlock interaction when the entrance finishes (0.2s delay + 1.4s run)
+    setTimeout(() => { introLock = false; }, 1650);
+    // then hold a beat before the demo spin, so it reads as a separate
+    // gesture rather than a continuation of the entrance
+    setTimeout(() => { if (pool.length) turn(ringY, -1, 900); }, 3400);
+  };
   const mod = (n, m) => ((n % m) + m) % m;
 
   const makeRing = axis => {
@@ -322,22 +330,54 @@
   };
   setTimeout(ambient, 7000);
 
-  discover().then(list => {
-    if (!list.length) return;   // no images: the drum stays invisible
+  // Fully fetch + decode one image. Resolves either way: a single missing
+  // file must never stall the entrance.
+  const preload = src => new Promise(res => {
+    const im = new Image();
+    im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(res);
+    im.onerror = () => res();
+    im.src = src;
+  });
+
+  // Background-fill the rest of the pool a few at a time. Loading all 20 at
+  // once saturates the connection and is what starved the opening frames.
+  const drainQueue = (srcs, width = 3) => {
+    let i = 0;
+    const next = () => { if (i < srcs.length) preload(srcs[i++]).then(next); };
+    for (let w = 0; w < width; w++) next();
+  };
+
+  discover().then(async list => {
+    if (!list.length) return startIntro();   // no images: don't hang the page
     for (let i = list.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [list[i], list[j]] = [list[j], list[i]];
     }
     pool = list;
-    pool.forEach(src => { const p = new Image(); p.src = src; });   // no decode flashes
     // disjoint halves so the two strips never duplicate each other
     const half = Math.ceil(pool.length / 2);
     ringY.base = pool.slice(0, half);
     ringX.base = pool.length > 1 ? pool.slice(half) : pool.slice();
     ringX.ovr.set(0, srcAt(ringY, 0));   // both rings agree on the opening center
+
+    // Only the faces actually on screen at rest gate the entrance: the
+    // center sticker and its four immediate neighbours. Everything else
+    // streams in behind the animation.
+    const first = [...new Set([
+      srcAt(ringY, 0), srcAt(ringY, 1), srcAt(ringY, -1),
+      srcAt(ringX, 1), srcAt(ringX, -1)
+    ])];
+    // Never let a slow network hold the page hostage — 2.5s and we go.
+    await Promise.race([
+      Promise.all(first.map(preload)),
+      new Promise(res => setTimeout(res, 2500))
+    ]);
+
     layout();
     rings.forEach(r => { assign(r, r.rot, false); r.el.style.visibility = 'visible'; });
     centers();
+    startIntro();
+    drainQueue(pool.filter(s => !first.includes(s)));
   });
 })();
 </script>

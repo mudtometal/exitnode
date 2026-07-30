@@ -533,12 +533,18 @@ body.landing a { cursor: url("assets/cursor.png") 12 12, pointer; }
 body.landing .overlay {
   animation: en-fade 0.45s ease both;
 }
-body.landing .collage {
+/* The cube is held invisible until its first stickers have decoded; JS adds
+   .cube-ready to <body> and only then does the entrance run. This stops the
+   animation playing over empty/broken faces on a cold load. */
+body.landing .collage { opacity: 0; }
+body.landing.cube-ready .collage {
   animation: en-cube 1.4s steps(20, end) 0.2s both;   /* higher framerate, still choppy */
 }
 
 @media (prefers-reduced-motion: reduce) {
   .page, .page::before,
   body.landing .overlay,
-  body.landing .collage { animation: none; }
+  body.landing.cube-ready .collage { animation: none; }
+  body.landing .collage { opacity: 0; }
+  body.landing.cube-ready .collage { opacity: 1; }
 }
